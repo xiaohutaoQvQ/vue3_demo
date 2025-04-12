@@ -104,6 +104,11 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 
+// 从环境变量中读取基础 URL
+const BASE_URL = import.meta.env.VITE_BASE_URL
+// const BASE_URL = 'http://nas.xiaohutao.xyz:9008'
+console.log(BASE_URL)
+
 interface CardItem {
   id: number
   title: string
@@ -124,7 +129,8 @@ const activeDropdown = ref<number | null>(null)
 
 const fetchData = async (): Promise<void> => {
   try {
-    const response = await axios.get<CardItem[]>('http://nas.xiaohutao.xyz:9008/api/selectHtml')
+    const response = await axios.get<CardItem[]>(`${BASE_URL}/api/selectHtml`)
+      console.log(response)
     if (Array.isArray(response.data)) {
       cards.value = response.data.map(item => ({
         ...item,
@@ -154,7 +160,7 @@ const retry = (): void => {
 
 const addCard = async (): Promise<void> => {
   try {
-    await axios.post('http://nas.xiaohutao.xyz:9008/api/addHtml', {
+    await axios.post(`${BASE_URL}/api/addHtml`, {
       title: newTitle.value,
       link: newLink.value
     })
@@ -184,7 +190,7 @@ const cancelEdit = (): void => {
 
 const updateCard = async (): Promise<void> => {
   try {
-    await axios.put('http://nas.xiaohutao.xyz:9008/api/updateHtml', {
+    await axios.put(`${BASE_URL}/api/updateHtml`, {
       id: editId.value,
       title: editTitle.value,
       link: editLink.value
@@ -198,7 +204,7 @@ const updateCard = async (): Promise<void> => {
 
 const deleteCard = async (id: number): Promise<void> => {
   try {
-    await axios.delete(`http://nas.xiaohutao.xyz:9008/api/deleteHtml/${id}`)
+    await axios.delete(`${BASE_URL}/api/deleteHtml/${id}`)
     fetchData()
   } catch (err) {
     console.error('删除失败:', err)
@@ -518,21 +524,5 @@ h1 {
   .modal-content {
     padding: 1.5rem;
   }
-}
-</style>
-
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Segoe UI', system-ui, sans-serif;
-  line-height: 1.6;
-  background: linear-gradient(135deg, #fff5f5 0%, #ffe3e3 100%);
-  color: #4a4a4a;
-  min-height: 100vh;
 }
 </style>
