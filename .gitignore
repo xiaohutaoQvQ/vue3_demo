@@ -1,0 +1,13 @@
+# 依赖包
+node_modules/
+*.log
+
+# 构建输出
+dist/
+*.map
+
+# IDE 配置
+.idea/
+*.iml
+*.ipr
+*.iws
