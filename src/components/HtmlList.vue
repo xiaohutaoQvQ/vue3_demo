@@ -81,6 +81,18 @@
           <span class="card-title">{{ item.title }}</span>
         </a>
 
+        <!-- 新增 PDF 预览按钮（示例：假设 item.link 是 PDF 文件名） -->
+        <button
+          v-if="isPdfLink(item.link)"
+          class="pdf-preview-btn"
+          @click="previewPdf(item.link)"
+        >
+          <svg class="icon" viewBox="0 0 24 24">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm2 14H6V4h8v12zm3-7V3.5L18.5 6H17v7z"/>
+          </svg>
+          预览 PDF
+        </button>
+
         <!-- 下拉菜单 -->
         <div class="dropdown">
           <button class="dropdown-toggle" @click.stop="toggleDropdown(item.id)">
@@ -104,6 +116,17 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 
+import { useRouter } from 'vue-router';  // 导入路由钩子
+
+// 获取路由实例
+const router = useRouter(); 
+
+interface CardItem {
+  id: number;
+  title: string;
+  link: string;
+}
+
 // 从环境变量中读取基础 URL
 const BASE_URL = import.meta.env.VITE_BASE_URL
 // const BASE_URL = 'http://nas.xiaohutao.xyz:9008'
@@ -115,7 +138,7 @@ interface CardItem {
   link: string
 }
 
-const cards = ref<CardItem[]>([])
+const cards = ref<CardItem[]>([]);
 const loading = ref(true)
 const error = ref(false)
 const newTitle = ref('')
@@ -223,6 +246,20 @@ document.addEventListener('click', (e) => {
 })
 
 onMounted(fetchData)
+
+// 示例函数：跳转至 PDF 预览页面
+const previewPdf = (fileName: string) => {
+  router.push({
+    path: `${fileName}`,
+    query: { watermark: '机密' }
+  });
+};
+
+// 在 script 中定义函数
+const isPdfLink = (link: string): boolean => {
+  const ext = link.toLowerCase().split('.').pop();
+  return ext === 'pdf'; // 判断后缀是否为 .pdf
+};
 </script>
 
 <style scoped>
