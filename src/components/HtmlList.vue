@@ -81,6 +81,19 @@
           <span class="card-title">{{ item.title }}</span>
         </a>
 
+  <div>
+    <button @click="showPreview = true">预览文件</button>
+    
+    <FilePreviewer
+      v-if="showPreview"
+      :fileId="selectedFileId"
+      :fileName="selectedFileName"
+      :fileSize="selectedFileSize"
+      :fileType="selectedFileType"
+      @close="showPreview = false"
+    />
+  </div>
+
         <!-- 下拉菜单 -->
         <div class="dropdown">
           <button class="dropdown-toggle" @click.stop="toggleDropdown(item.id)">
@@ -103,6 +116,14 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
+
+import FilePreviewer from './FilePreviewer.vue';
+
+const showPreview = ref(false);
+const selectedFileId = ref('123');
+const selectedFileName = ref('document.pdf');
+const selectedFileSize = ref('2.4 MB');
+const selectedFileType = ref('pdf');
 
 // 从环境变量中读取基础 URL
 const BASE_URL = import.meta.env.VITE_BASE_URL

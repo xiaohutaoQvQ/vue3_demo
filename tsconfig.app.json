@@ -1,12 +1,14 @@
 {
-  "extends": "@vue/tsconfig/tsconfig.dom.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
-  "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  }
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "composite": true,
+    "outDir": "./dist/app",
+    "rootDir": "./src",
+    // "jsx": "vue-jsx",
+    "types": ["vite/client", "vue"]
+  },
+  "include": ["src/**/*.ts", "src/**/*.vue"],
+  "exclude": ["node_modules"]
 }
